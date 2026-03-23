@@ -2,22 +2,22 @@
 
 Проект разнесён на две отдельные части:
 
-- [`frontend`](/Users/mikhail/Documents/New project/frontend) — `React + Vite`
-- [`backend`](/Users/mikhail/Documents/New project/backend) — `Express + TypeScript + PostgreSQL`
+- `frontend` — `React + Vite`
+- `backend` — `Express + TypeScript + PostgreSQL`
 
 Всё приложение поднимается из корня одной docker-командой или через npm-скрипты.
 
 ## Структура
 
-- [`frontend/src`](/Users/mikhail/Documents/New project/frontend/src) — исходники клиентского приложения
-- [`frontend/Dockerfile`](/Users/mikhail/Documents/New project/frontend/Dockerfile) — сборка фронтенда и запуск через `nginx`
-- [`backend/src`](/Users/mikhail/Documents/New project/backend/src) — исходники API
-- [`backend/db/schema.sql`](/Users/mikhail/Documents/New project/backend/db/schema.sql) — схема PostgreSQL
-- [`backend/db/seed.sql`](/Users/mikhail/Documents/New project/backend/db/seed.sql) — демо-данные
-- [`backend/Dockerfile`](/Users/mikhail/Documents/New project/backend/Dockerfile) — контейнер API
-- [`docker-compose.dev.yml`](/Users/mikhail/Documents/New project/docker-compose.dev.yml) — dev-стек с hot reload и seed
-- [`docker-compose.prod.yml`](/Users/mikhail/Documents/New project/docker-compose.prod.yml) — production-стек для VPS
-- [`scripts`](/Users/mikhail/Documents/New project/scripts) — обслуживающие скрипты (`migrate`, `seed`, `backup`)
+- `frontend/src` — исходники клиентского приложения
+- `frontend/Dockerfile` — сборка фронтенда и запуск через `nginx`
+- `backend/src` — исходники API
+- `backend/db/schema.sql` — схема PostgreSQL
+- `backend/db/seed.sql` — демо-данные
+- `backend/Dockerfile` — контейнер API
+- `docker-compose.dev.yml` — dev-стек с hot reload и seed
+- `docker-compose.prod.yml` — production-стек для VPS
+- `scripts` — обслуживающие скрипты (`migrate`, `seed`, `backup`)
 
 ## Dev-режим одной командой
 
@@ -47,6 +47,7 @@ npm run logs:dev
 ```
 
 ## Local Production Like
+
 Для локальной production-проверки (без hot reload):
 
 ```bash
@@ -146,7 +147,7 @@ npm run prod:down
 
 ## Локальная разработка вне Docker
 
-- frontend env: [`frontend/.env.example`](/Users/mikhail/Documents/New project/frontend/.env.example)
-- backend env: [`backend/.env.example`](/Users/mikhail/Documents/New project/backend/.env.example)
+- frontend env: `frontend/.env.example`
+- backend env: `backend/.env.example`
 
 Для локального запуска вне Docker зависимости теперь должны ставиться отдельно внутри `frontend` и `backend`.
