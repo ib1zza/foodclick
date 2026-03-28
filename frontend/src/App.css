@@ -276,7 +276,11 @@
   min-height: 163px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, rgba(72, 61, 61, 0.92), rgba(36, 31, 31, 0.96));
+  background: linear-gradient(
+    135deg,
+    rgba(72, 61, 61, 0.92),
+    rgba(36, 31, 31, 0.96)
+  );
 }
 
 .promo-slider,
@@ -306,8 +310,17 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(26, 19, 19, 0.18) 8%, rgba(26, 19, 19, 0.08) 30%, rgba(26, 19, 19, 0.62) 100%),
-    linear-gradient(180deg, rgba(26, 19, 19, 0.08) 0%, rgba(26, 19, 19, 0.42) 100%);
+    linear-gradient(
+      90deg,
+      rgba(26, 19, 19, 0.18) 8%,
+      rgba(26, 19, 19, 0.08) 30%,
+      rgba(26, 19, 19, 0.62) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(26, 19, 19, 0.08) 0%,
+      rgba(26, 19, 19, 0.42) 100%
+    );
 }
 
 .promo-copy {
@@ -449,26 +462,30 @@
 }
 
 .category-card__image {
-  height: 82px;
+  /* height: auto; */
+  flex: 1 1 auto;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: transparent;
+  height: 0;
 }
 
 .category-card__image img {
-  width: 82%;
-  height: 82%;
+  width: 86%;
+  height: 86%;
   object-fit: contain;
 }
 
 .category-card h3 {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   color: var(--fc-white);
   font-size: var(--fs-card-title);
   font-weight: 500;
-  line-height: 1.15;
-  min-height: 34px;
+  line-height: 1.1;
+  min-height: 0;
+  text-align: left;
 }
 
 .category-card h3 span {
@@ -515,6 +532,16 @@
   transition:
     transform 0.24s ease,
     opacity 0.2s ease;
+}
+
+.category-card {
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--fc-card);
 }
 
 .section-state {
@@ -1366,7 +1393,7 @@
   width: 39px;
   height: 39px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 20px;
 }
 
 .footer-links {
@@ -1409,8 +1436,16 @@
 
 .register-page__hero {
   background:
-    radial-gradient(circle at top right, rgba(154, 225, 149, 0.2), transparent 32%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+    radial-gradient(
+      circle at top right,
+      rgba(154, 225, 149, 0.2),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.02)
+    );
 }
 
 .register-page__hero h1,
@@ -1836,8 +1871,13 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .category-card {
+    padding: 7px;
+    border-radius: 10px;
+  }
+
   .category-card__image {
-    height: 59px;
+    min-height: 0;
   }
 
   .category-card h3,
