@@ -127,12 +127,15 @@ function Header() {
           ) : null}
         </form>
 
-        <div className="fc-actions">
-          <Link className="icon-button" to="/register" aria-label="Профиль">
-            <UserIcon />
-          </Link>
-          <button
-            className="icon-button icon-button--basket"
+      <div className="fc-actions">
+        <Link className="icon-button" to="/register" aria-label="Профиль">
+          <UserIcon />
+        </Link>
+        <Link className="icon-button icon-button--favorite" to="/favorites" aria-label="Избранное">
+          ❤
+        </Link>
+        <button
+          className="icon-button icon-button--basket"
             type="button"
             aria-label="Корзина"
             onClick={openBasket}

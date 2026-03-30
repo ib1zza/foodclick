@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { getPromotions, getStoreCategories, getStores } from "../lib/api";
+import { useFavoritesStore } from "../store/useFavoritesStore";
 import {
   assets,
   categoryImageBySlug,
@@ -411,17 +412,23 @@ export function CuisinesSection() {
 }
 
 export function CollectionsSection() {
+  const favorites = useFavoritesStore((state) => state.items);
+
   return (
     <section className="collections-section">
-      <article className="collection-card">
+      <Link className="collection-card" to="/favorites">
         <div className="collection-card__visual">
           <img src={assets.heartArt} alt="" />
         </div>
         <div className="collection-card__copy">
           <h3>Избранное</h3>
-          <p>Пока ничего нет</p>
+          <p>
+            {favorites.length > 0
+              ? `Сохранено: ${favorites.length}`
+              : "Пока ничего нет"}
+          </p>
         </div>
-      </article>
+      </Link>
 
       <article className="collection-card">
         <div className="collection-card__visual collection-card__visual--empty">

@@ -74,3 +74,22 @@ export function mapProductForBasket(product) {
     selectedOptions,
   }
 }
+
+export function mapProductForFavorite(product, store) {
+  return {
+    id: Number(product.id),
+    name: product.name,
+    description: product.description,
+    image_url: product.image_url ?? null,
+    price: Number(product.priceValue ?? product.price) || 0,
+    type: product.type,
+    tag: product.tag ?? null,
+    tone: product.tone ?? 'green',
+    store: store
+      ? {
+          slug: store.slug,
+          name: store.name,
+        }
+      : null,
+  }
+}

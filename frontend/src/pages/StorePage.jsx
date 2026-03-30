@@ -1,9 +1,10 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getStore, getStoreProducts } from '../lib/api'
-import { formatPrice, mapProductForBasket } from '../lib/foodclick'
+import { formatPrice, mapProductForBasket, mapProductForFavorite } from '../lib/foodclick'
 import { Chevron, StarIcon } from '../components/icons'
 import { useBasketStore } from '../store/useBasketStore'
+import { useFavoritesStore } from '../store/useFavoritesStore'
 
 const filterChips = [
   { key: 'all', label: 'Все' },
@@ -22,6 +23,8 @@ function StorePage() {
   const [search, setSearch] = useState('')
   const addItem = useBasketStore((state) => state.addItem)
   const openBasket = useBasketStore((state) => state.openBasket)
+  const favorites = useFavoritesStore((state) => state.items)
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite)
   const deferredSearch = useDeferredValue(search)
 
   useEffect(() => {
@@ -187,11 +190,14 @@ function StorePage() {
           {filteredProducts.length === 0 ? (
             <p className="section-state">По выбранному фильтру пока ничего нет.</p>
           ) : (
-            filteredProducts.map((product) => (
-              <article
-                className={`store-product-card store-product-card--${product.tone ?? 'green'}`}
-                key={product.id}
-              >
+            filteredProducts.map((product) => {
+              const isFavorite = favorites.some((item) => item.id === Number(product.id))
+
+              return (
+                <article
+                  className={`store-product-card store-product-card--${product.tone ?? 'green'}`}
+                  key={product.id}
+                >
                 <Link className="store-product-card__body" to={`/products/${product.id}`}>
                   <div className="store-product-card__art">
                     {product.image_url ? (
@@ -215,18 +221,35 @@ function StorePage() {
                 </Link>
                 <div className="store-product-card__footer">
                   <strong>{formatPrice(product.price)}</strong>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      addItem(mapProductForBasket(product))
-                      openBasket()
-                    }}
-                  >
-                    Добавить
-                  </button>
+                  <div className="store-product-card__actions">
+                    <button
+                      className={`favorite-toggle ${isFavorite ? 'favorite-toggle--active' : ''}`}
+                      type="button"
+                      onClick={() =>
+                        toggleFavorite(
+                          mapProductForFavorite(product, {
+                            slug: store.slug,
+                            name: store.name,
+                          }),
+                        )
+                      }
+                    >
+                      {isFavorite ? '★ В избранном' : '☆ В избранное'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        addItem(mapProductForBasket(product))
+                        openBasket()
+                      }}
+                    >
+                      Добавить
+                    </button>
+                  </div>
                 </div>
-              </article>
-            ))
+                </article>
+              )
+            })
           )}
         </div>
       </section>

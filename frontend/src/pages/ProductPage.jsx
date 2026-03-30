@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getProduct } from '../lib/api'
 import { Chevron } from '../components/icons'
-import { formatPrice, mapProductForBasket } from '../lib/foodclick'
+import { formatPrice, mapProductForBasket, mapProductForFavorite } from '../lib/foodclick'
 import { useBasketStore } from '../store/useBasketStore'
+import { useFavoritesStore } from '../store/useFavoritesStore'
 
 function ProductPage() {
   const { id } = useParams()
@@ -13,6 +14,8 @@ function ProductPage() {
   const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState({})
   const addItem = useBasketStore((state) => state.addItem)
   const openBasket = useBasketStore((state) => state.openBasket)
+  const favorites = useFavoritesStore((state) => state.items)
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite)
 
   useEffect(() => {
     let isMounted = true
@@ -100,6 +103,14 @@ function ProductPage() {
       return []
     })
   }, [product, selectedOptionsByGroup])
+
+  const isFavorite = useMemo(() => {
+    if (!product) {
+      return false
+    }
+
+    return favorites.some((item) => item.id === Number(product.id))
+  }, [favorites, product])
 
   function toggleOption(group, optionId) {
     setSelectedOptionsByGroup((currentState) => {
@@ -203,6 +214,21 @@ function ProductPage() {
                 }}
               >
                 Добавить в корзину
+              </button>
+
+              <button
+                className={`product-page__favorite ${isFavorite ? 'product-page__favorite--active' : ''}`}
+                type="button"
+                onClick={() =>
+                  toggleFavorite(
+                    mapProductForFavorite(product, {
+                      slug: product.store.slug,
+                      name: product.store.name,
+                    }),
+                  )
+                }
+              >
+                {isFavorite ? '★ Убрать из избранного' : '☆ Добавить в избранное'}
               </button>
 
               {validationErrors.length > 0 ? (
