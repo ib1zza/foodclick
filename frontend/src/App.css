@@ -332,7 +332,8 @@
 
 .promo-copy {
   position: absolute;
-  right: 20px;
+  right: 66px;
+
   bottom: 22px;
   max-width: 320px;
   text-align: right;
@@ -1870,6 +1871,11 @@
 
   .fc-header {
     gap: 12px;
+    padding: 0;
+  }
+
+  .fc-brand {
+    font-size: 32px;
   }
 
   .fc-nav {
@@ -1923,9 +1929,9 @@
   }
 
   .promo-copy {
-    right: 14px;
+    right: 66px;
     bottom: 16px;
-    max-width: 168px;
+    max-width: 400px;
   }
 
   .promo-chip {
@@ -1935,7 +1941,7 @@
   }
 
   .promo-copy strong {
-    font-size: 2rem;
+    font-size: 1.2rem;
   }
 
   .promo-copy p {
