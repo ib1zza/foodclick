@@ -1,95 +1,99 @@
-import { useDeferredValue, useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getStore, getStoreProducts } from '../lib/api'
-import { formatPrice, mapProductForBasket, mapProductForFavorite } from '../lib/foodclick'
-import { Chevron, StarIcon } from '../components/icons'
-import { useBasketStore } from '../store/useBasketStore'
-import { useFavoritesStore } from '../store/useFavoritesStore'
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { getStore, getStoreProducts } from "../lib/api";
+import {
+  formatPrice,
+  mapProductForBasket,
+  mapProductForFavorite,
+} from "../lib/foodclick";
+import { Chevron, StarIcon } from "../components/icons";
+import { useBasketStore } from "../store/useBasketStore";
+import { useFavoritesStore } from "../store/useFavoritesStore";
 
 const filterChips = [
-  { key: 'all', label: 'Все' },
-  { key: 'dish', label: 'Блюда' },
-  { key: 'product', label: 'Товары' },
-  { key: 'customizable', label: 'С конструктором' },
-]
+  { key: "all", label: "Все" },
+  { key: "dish", label: "Блюда" },
+  { key: "product", label: "Товары" },
+  { key: "customizable", label: "С конструктором" },
+];
 
 function StorePage() {
-  const { slug } = useParams()
-  const [store, setStore] = useState(null)
-  const [products, setProducts] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [activeFilter, setActiveFilter] = useState('all')
-  const [search, setSearch] = useState('')
-  const addItem = useBasketStore((state) => state.addItem)
-  const openBasket = useBasketStore((state) => state.openBasket)
-  const favorites = useFavoritesStore((state) => state.items)
-  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite)
-  const deferredSearch = useDeferredValue(search)
+  const { slug } = useParams();
+  const [store, setStore] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const addItem = useBasketStore((state) => state.addItem);
+  const openBasket = useBasketStore((state) => state.openBasket);
+  const favorites = useFavoritesStore((state) => state.items);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+  const deferredSearch = useDeferredValue(search);
 
   useEffect(() => {
-    let isMounted = true
+    let isMounted = true;
 
     async function loadStorePage() {
-      setIsLoading(true)
-      setError('')
+      setIsLoading(true);
+      setError("");
 
       try {
         const productType =
-          activeFilter === 'dish' || activeFilter === 'product'
+          activeFilter === "dish" || activeFilter === "product"
             ? activeFilter
-            : undefined
+            : undefined;
         const [storeData, productsData] = await Promise.all([
           getStore(slug),
           getStoreProducts(slug, {
             type: productType,
             search: deferredSearch,
           }),
-        ])
+        ]);
 
         if (!isMounted) {
-          return
+          return;
         }
 
-        setStore(storeData)
-        setProducts(productsData.items)
+        setStore(storeData);
+        setProducts(productsData.items);
       } catch (requestError) {
         if (!isMounted) {
-          return
+          return;
         }
 
-        setError('Не удалось загрузить магазин')
+        setError("Не удалось загрузить магазин");
       } finally {
         if (isMounted) {
-          setIsLoading(false)
+          setIsLoading(false);
         }
       }
     }
 
     if (slug) {
-      void loadStorePage()
+      void loadStorePage();
     }
 
     return () => {
-      isMounted = false
-    }
-  }, [activeFilter, deferredSearch, slug])
+      isMounted = false;
+    };
+  }, [activeFilter, deferredSearch, slug]);
 
   const filteredProducts = useMemo(() => {
-    if (activeFilter === 'dish') {
-      return products.filter((product) => product.type === 'dish')
+    if (activeFilter === "dish") {
+      return products.filter((product) => product.type === "dish");
     }
 
-    if (activeFilter === 'product') {
-      return products.filter((product) => product.type === 'product')
+    if (activeFilter === "product") {
+      return products.filter((product) => product.type === "product");
     }
 
-    if (activeFilter === 'customizable') {
-      return products.filter((product) => product.is_customizable)
+    if (activeFilter === "customizable") {
+      return products.filter((product) => product.is_customizable);
     }
 
-    return products
-  }, [activeFilter, products])
+    return products;
+  }, [activeFilter, products]);
 
   if (isLoading) {
     return (
@@ -104,7 +108,7 @@ function StorePage() {
           </div>
         </section>
       </main>
-    )
+    );
   }
 
   if (error || !store) {
@@ -116,11 +120,11 @@ function StorePage() {
               <Chevron direction="left" />
               На главную
             </Link>
-            <p>{error || 'Магазин не найден'}</p>
+            <p>{error || "Магазин не найден"}</p>
           </div>
         </section>
       </main>
-    )
+    );
   }
 
   return (
@@ -165,7 +169,7 @@ function StorePage() {
       <section className="store-filters">
         {filterChips.map((chip) => (
           <button
-            className={`filter-chip ${activeFilter === chip.key ? 'filter-chip--active' : ''}`}
+            className={`filter-chip ${activeFilter === chip.key ? "filter-chip--active" : ""}`}
             type="button"
             key={chip.key}
             onClick={() => setActiveFilter(chip.key)}
@@ -188,73 +192,93 @@ function StorePage() {
       <section className="store-layout">
         <div className="product-list">
           {filteredProducts.length === 0 ? (
-            <p className="section-state">По выбранному фильтру пока ничего нет.</p>
+            <p className="section-state">
+              По выбранному фильтру пока ничего нет.
+            </p>
           ) : (
             filteredProducts.map((product) => {
-              const isFavorite = favorites.some((item) => item.id === Number(product.id))
+              const isFavorite = favorites.some(
+                (item) => item.id === Number(product.id),
+              );
 
               return (
                 <article
-                  className={`store-product-card store-product-card--${product.tone ?? 'green'}`}
+                  className={`store-product-card store-product-card--${product.tone ?? "green"}`}
                   key={product.id}
                 >
-                <Link className="store-product-card__body" to={`/products/${product.id}`}>
-                  <div className="store-product-card__art">
-                    {product.image_url ? (
-                      <img
-                        className="store-product-card__image"
-                        src={product.image_url}
-                        alt={product.name}
+                  <Link
+                    className="store-product-card__body"
+                    to={`/products/${product.id}`}
+                  >
+                    <div className="store-product-card__art">
+                      {product.image_url ? (
+                        <img
+                          className="store-product-card__image"
+                          src={product.image_url}
+                          alt={product.name}
+                        />
+                      ) : (
+                        <div
+                          className="store-product-card__placeholder"
+                          aria-hidden="true"
+                        >
+                          <span>
+                            {product.type === "dish" ? "Блюдо" : "Товар"}
+                          </span>
+                        </div>
+                      )}
+                      <div
+                        className="store-product-card__overlay"
+                        aria-hidden="true"
                       />
-                    ) : (
-                      <div className="store-product-card__placeholder" aria-hidden="true">
-                        <span>{product.type === 'dish' ? 'Блюдо' : 'Товар'}</span>
-                      </div>
-                    )}
-                    <div className="store-product-card__overlay" aria-hidden="true" />
-                    <span>{product.tag ?? (product.is_customizable ? 'Конструктор' : product.type)}</span>
+                      <span>
+                        {product.tag ??
+                          (product.is_customizable
+                            ? "Конструктор"
+                            : product.type)}
+                      </span>
+                    </div>
+                    <div className="store-product-card__copy">
+                      <h2>{product.name}</h2>
+                      <p>{product.description}</p>
+                    </div>
+                  </Link>
+                  <div className="store-product-card__footer">
+                    <strong>{formatPrice(product.price)}</strong>
+                    <div className="store-product-card__actions">
+                      <button
+                        className={`favorite-toggle ${isFavorite ? "favorite-toggle--active" : ""}`}
+                        type="button"
+                        onClick={() =>
+                          toggleFavorite(
+                            mapProductForFavorite(product, {
+                              slug: store.slug,
+                              name: store.name,
+                            }),
+                          )
+                        }
+                      >
+                        {isFavorite ? "❤ В избранном" : "❤ В избранное"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          addItem(mapProductForBasket(product));
+                          openBasket();
+                        }}
+                      >
+                        Добавить
+                      </button>
+                    </div>
                   </div>
-                  <div className="store-product-card__copy">
-                    <h2>{product.name}</h2>
-                    <p>{product.description}</p>
-                  </div>
-                </Link>
-                <div className="store-product-card__footer">
-                  <strong>{formatPrice(product.price)}</strong>
-                  <div className="store-product-card__actions">
-                    <button
-                      className={`favorite-toggle ${isFavorite ? 'favorite-toggle--active' : ''}`}
-                      type="button"
-                      onClick={() =>
-                        toggleFavorite(
-                          mapProductForFavorite(product, {
-                            slug: store.slug,
-                            name: store.name,
-                          }),
-                        )
-                      }
-                    >
-                      {isFavorite ? '★ В избранном' : '☆ В избранное'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        addItem(mapProductForBasket(product))
-                        openBasket()
-                      }}
-                    >
-                      Добавить
-                    </button>
-                  </div>
-                </div>
                 </article>
-              )
+              );
             })
           )}
         </div>
       </section>
     </main>
-  )
+  );
 }
 
-export default StorePage
+export default StorePage;
